@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#080815" />
+    <meta name="description" content="宇宙银行今日营业。写下心愿，带上幸运硬币，长按收下今天的幸运号码。" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23080815'/%3E%3Cpath d='M11 34c11-14 27-18 43-12-11 1-23 8-31 20' fill='none' stroke='%23cfc1ff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='48' cy='20' r='5' fill='%23ffdca8'/%3E%3C/svg%3E" />
+    <title>宇宙银行今日营业 · 宇宙支票</title>
+    <link rel="stylesheet" href="./styles.css?v=20261007-target-cover" />
+  </head>
+  <body>
+    <main class="experience" aria-live="polite">
+      <div class="sky" aria-hidden="true">
+        <span class="star star-a"></span>
+        <span class="star star-b"></span>
+        <span class="star star-c"></span>
+        <span class="orbit orbit-a"></span>
+        <span class="orbit orbit-b"></span>
+      </div>
+
+      <header class="topbar">
+        <span class="eyebrow">COSMIC BANK</span>
+        <div class="topbar-tools">
+          <span id="todayLabel" class="date-label"></span>
+
+        </div>
+      </header>
+
+      <section class="screen is-active welcome-screen" data-screen="welcome">
+        <div class="screen-copy">
+          <p class="kicker">欢迎来到心愿柜台</p>
+          <h1 class="bank-title">宇宙银行<br /><span>今日营业</span></h1>
+          <p class="lede">欢迎带着心愿来。<br />今天，给喜欢的未来留个位置。</p>
+        </div>
+        <div class="teller-stage" aria-label="两位宇宙银行柜员">
+          <div class="bank-halo" aria-hidden="true"></div>
+          <figure class="hero-teller teller-purple">
+            <span class="public-teller">心愿</span>
+            <figcaption>心愿柜员<span>愿望审核员</span></figcaption>
+          </figure>
+          <figure class="hero-teller teller-green">
+            <span class="public-teller">幸运</span>
+            <figcaption>幸运柜员<span>幸运出纳员</span></figcaption>
+          </figure>
+          <div class="bank-counter" aria-hidden="true"><span>心愿专柜</span></div>
+        </div>
+        <button class="primary-button" data-action="begin">填一张宇宙支票</button>
+      </section>
+
+      <section class="screen" data-screen="wish" aria-hidden="true">
+        <div class="step-number">01</div>
+        <div class="screen-copy compact">
+          <p class="kicker">01 · 填写心愿</p>
+          <h2>愿望实现的那天，<br />你正在做什么？</h2>
+          <label class="field-label" for="wishInput">用现在时写下来，让自己先住进去一小会儿</label>
+          <textarea id="wishInput" maxlength="64" placeholder="我正在……" aria-describedby="wishHelp"></textarea>
+          <p class="input-help" id="wishHelp">把那一幕写具体一点，5–64 个字。</p>
+          <div class="field-row">
+            <span>这份愿望，我想接收</span>
+            <label class="amount-field">
+              <span>¥</span>
+              <input id="amountInput" inputmode="numeric" maxlength="8" value="50000" aria-label="心愿金额" />
+            </label>
+          </div>
+          <p class="teller-note purple"><span class="public-teller">心愿</span><span><b>心愿柜员 · 愿望审核员</b>写具体一点，宇宙也需要看懂需求。</span></p>
+        </div>
+        <button class="primary-button" data-action="wish-next" disabled>嗯，就是这一幕</button>
+      </section>
+
+      <section class="screen coins-screen" data-screen="coins" aria-hidden="true">
+        <div class="screen-copy coins-copy">
+          <p class="kicker">02 · 幸运硬币</p>
+          <h2>今天带了多少<br /><span>幸运硬币？</span></h2>
+          <p class="coins-lede">把幸运硬币交给宇宙，给心愿加满能量。</p>
+          <label class="coins-amount" for="budgetInput"><span class="coin-mark" aria-hidden="true">✦</span><input id="budgetInput" type="number" inputmode="numeric" min="2" max="200" step="1" value="20" aria-label="幸运硬币数量" /><span>枚</span></label>
+          <p class="coins-unit">1 枚幸运硬币 = 1 元</p>
+          <label class="field-label gratitude-label" for="promiseInput">送给宇宙一句感谢</label>
+          <textarea id="promiseInput" class="gratitude-input" maxlength="120" placeholder="谢谢今天的好运。"></textarea>
+          <p class="coins-error" id="coinsError" role="alert" hidden></p>
+        </div>
+        <button class="luck-button" data-action="hold" aria-label="长按收下这份幸运，也可按住空格或回车" aria-describedby="holdHint">
+          <span class="luck-button-progress" aria-hidden="true"></span>
+          <span class="luck-button-star" aria-hidden="true">✦</span>
+          <span id="receiveLabel">收下这份幸运</span>
+        </button>
+        <p class="hold-hint" id="holdHint" role="status">长按，让好运登场</p>
+        <button class="text-button coins-back" data-action="coins-back">修改心愿</button>
+      </section>
+
+      <section class="screen result-screen" data-screen="result" aria-hidden="true">
+        <div class="manifest-card" id="manifestCard">
+          <div class="card-head">
+            <span>宇宙支票</span>
+            <span id="cardDate"></span>
+          </div>
+          <h2 class="ticket-game" id="numbersLabel"></h2>
+          <p class="ticket-summary" id="cardPlan"></p>
+          <p class="ticket-total" id="cardTotal"></p>
+          <p class="target-condition" id="targetCondition" hidden></p>
+          <div class="ticket-list" id="numbers" aria-label="今天的随机号码清单"></div>
+          <div class="wish-receipt"><p id="cardWish"></p><span id="cardAmount"></span></div>
+        </div>
+
+        <div class="result-actions">
+          <button class="primary-button" data-action="copy">复制方案</button>
+          <button class="text-button" data-action="share">分享支票</button>
+        </div>
+
+        <p class="responsible-note">
+          随机选号 · 奖金以官方公告为准 · 18+
+        </p>
+      </section>
+
+      <div class="toast" id="toast" role="status"></div>
+    </main>
+    <div id="luckEffects" aria-hidden="true"></div>
+    <script type="module" src="./app.js?v=20261007-target-cover"></script>
+  </body>
+</html>

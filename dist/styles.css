@@ -1,0 +1,543 @@
+:root {
+  color-scheme: dark;
+  --ink: #f6f3ff;
+  --muted: rgba(237, 232, 255, 0.62);
+  --line: rgba(222, 211, 255, 0.17);
+  --violet: #8496c7;
+  --violet-bright: #c8d1ef;
+  --gold: #f4dbac;
+  --night: #080815;
+  --night-soft: #111027;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--night);
+  color: var(--ink);
+  font-family: "Noto Serif SC", "Songti SC", "STSong", "PingFang SC", serif;
+}
+
+button, input, textarea { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+body {
+  overflow: hidden;
+  min-height: 100svh;
+}
+
+.experience {
+  position: relative;
+  width: min(100%, 520px);
+  min-height: 100svh;
+  margin: 0 auto;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 78% 14%, rgba(115, 85, 219, 0.24), transparent 34%),
+    radial-gradient(circle at 8% 77%, rgba(44, 89, 160, 0.22), transparent 38%),
+    linear-gradient(160deg, #11102b 0%, #080815 52%, #060611 100%);
+}
+
+.experience::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .2;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+
+.sky { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(207, 193, 255, .7);
+  animation: breathe 4s ease-in-out infinite;
+}
+.star-a { top: 17%; left: 17%; }
+.star-b { top: 34%; right: 14%; animation-delay: -1.5s; }
+.star-c { bottom: 25%; left: 12%; animation-delay: -2.6s; }
+.orbit {
+  position: absolute;
+  width: 68vw;
+  max-width: 350px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(212, 198, 255, .08);
+  border-radius: 50%;
+  transform: rotate(-18deg) scaleY(.46);
+}
+.orbit-a { right: -28%; top: 7%; }
+.orbit-b { left: -38%; bottom: 5%; transform: rotate(20deg) scaleY(.55); }
+
+.topbar {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 24px 0;
+  color: rgba(255,255,255,.5);
+  font-family: Inter, "PingFang SC", sans-serif;
+  font-size: .75rem;
+  letter-spacing: .18em;
+}
+
+.topbar-tools { display: flex; align-items: center; gap: 10px; }
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .04);
+  color: var(--muted);
+  font-family: "PingFang SC", sans-serif;
+  font-size: .7rem;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.music-toggle[aria-pressed="true"] { color: var(--gold); border-color: rgba(244, 219, 172, .4); }
+.music-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: max(82px, calc(env(safe-area-inset-top) + 58px)) 26px max(34px, calc(env(safe-area-inset-bottom) + 24px));
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity .65s ease, transform .65s ease, visibility .65s;
+}
+
+.screen > * { flex-shrink: 0; }
+.screen > .primary-button { margin-top: auto; }
+button:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 5px; }
+textarea:focus-visible, input:focus-visible { border-color: var(--gold); }
+
+.screen.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.screen-copy { margin: 0 0 32px; }
+.screen-copy.compact { padding-top: clamp(16px, 5svh, 44px); }
+.kicker {
+  margin: 0 0 18px;
+  color: var(--violet-bright);
+  font-family: Inter, "PingFang SC", sans-serif;
+  font-size: .78rem;
+  letter-spacing: .16em;
+}
+
+h1, h2, p { margin-top: 0; }
+h1 {
+  margin-bottom: 26px;
+  font-size: clamp(4.4rem, 23vw, 7rem);
+  font-weight: 500;
+  line-height: .94;
+  letter-spacing: -.08em;
+  text-shadow: 0 0 44px rgba(153, 120, 255, .2);
+}
+.bank-title {
+  margin-bottom: 20px;
+  font-size: clamp(2.6rem, 12vw, 3.8rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: .02em;
+}
+.bank-title span { color: var(--gold); }
+h2 {
+  margin-bottom: 28px;
+  font-size: clamp(1.75rem, 7.7vw, 2.45rem);
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: -.045em;
+}
+.lede, .whisper {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.welcome-screen { background: radial-gradient(ellipse at 50% 60%, #27203e 0%, transparent 60%); }
+.welcome-screen .screen-copy { margin: 0; padding-top: clamp(8px, 3svh, 26px); }
+.welcome-screen .kicker { color: rgba(255,245,222,.82); }
+.welcome-screen .lede { color: rgba(246,243,255,.78); text-shadow: 0 2px 18px rgba(0,0,0,.72); }
+.welcome-screen .primary-button {
+  margin-top: 24px;
+}
+.teller-stage { position: relative; height: clamp(220px, 36svh, 330px); margin-block: auto; isolation: isolate; }
+.bank-halo { position: absolute; top: 4%; left: 15%; width: 70%; aspect-ratio: 1; border: 1px solid rgba(244,219,172,.18); border-radius: 50%; background: radial-gradient(circle, rgba(244,219,172,.09), transparent 68%); box-shadow: 0 0 55px rgba(192,161,255,.1); z-index: -1; }
+.hero-teller { position: absolute; width: 56%; bottom: 16px; margin: 0; text-align: center; }
+.teller-purple { left: -5%; }
+.teller-green { right: -5%; }
+.hero-teller img { display: block; width: 100%; height: auto; filter: drop-shadow(0 12px 20px rgba(0,0,0,.2)); }
+.hero-teller figcaption { color: #d7bcff; font-family: "PingFang SC", sans-serif; font-size: .875rem; line-height: 1.6; }
+.teller-green figcaption { color: #a9ddbc; }
+.hero-teller figcaption span { display: block; color: var(--muted); font-size: .75rem; }
+.bank-counter { position: absolute; bottom: 65px; left: 0; right: 0; height: 50px; display: grid; place-items: center; border: 1px solid rgba(244,219,172,.3); border-top: 5px solid #b49c87; border-radius: 7px 7px 18px 18px; background: linear-gradient(135deg, #332940, #202336); box-shadow: 0 12px 30px rgba(0,0,0,.26); }
+.bank-counter span { color: var(--gold); font-size: .75rem; letter-spacing: .3em; }
+
+.step-number {
+  position: absolute;
+  right: 25px;
+  top: 14%;
+  color: rgba(255,255,255,.1);
+  font-family: Inter, sans-serif;
+  font-size: 4.8rem;
+  font-weight: 200;
+  line-height: 1;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,.68);
+  font-family: "PingFang SC", sans-serif;
+  font-size: .875rem;
+  line-height: 1.7;
+}
+.input-help { margin: 9px 0 0; color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .75rem; line-height: 1.6; }
+
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 130px;
+  resize: none;
+  padding: 18px 0;
+  color: var(--ink);
+  caret-color: var(--violet-bright);
+  border: 0;
+  border-block: 1px solid var(--line);
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+textarea::placeholder { color: rgba(237,232,255,.5); }
+
+.field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 22px;
+  color: var(--muted);
+  font-family: "PingFang SC", sans-serif;
+  font-size: .88rem;
+}
+.amount-field {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--gold);
+  font-family: Inter, "PingFang SC", sans-serif;
+  font-size: 1.1rem;
+}
+.amount-field input {
+  width: 92px;
+  padding: 5px 0;
+  color: var(--gold);
+  border: 0;
+  border-bottom: 1px solid rgba(255,220,168,.34);
+  outline: 0;
+  background: transparent;
+  text-align: right;
+  font-size: 1.1rem;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 58px;
+  padding: 14px 20px;
+  color: #171124;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(105deg, #f6eddc, #e8d1a6);
+  box-shadow: 0 14px 50px rgba(24, 31, 62, .34);
+  font-family: "PingFang SC", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.primary-button:active { transform: scale(.985); }
+.primary-button:disabled { opacity: .25; cursor: default; }
+
+.result-screen { padding-top: max(82px, calc(env(safe-area-inset-top) + 58px)); }
+.manifest-card {
+  position: relative;
+  width: 100%;
+  padding: 22px 21px 20px;
+  overflow: hidden;
+  border: 1px solid rgba(222,211,255,.22);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.025));
+  box-shadow: 0 30px 90px rgba(0,0,0,.38);
+  backdrop-filter: blur(18px);
+}
+.manifest-card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -85px;
+  top: -85px;
+  border: 1px solid rgba(255,220,168,.18);
+  border-radius: 50%;
+  box-shadow: 0 0 70px rgba(169,140,255,.2);
+}
+.card-head, .card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: rgba(255,255,255,.7);
+  font-family: Inter, "PingFang SC", sans-serif;
+  font-size: .875rem;
+  letter-spacing: .06em;
+}
+.card-head > span:first-child { color: var(--gold); font-family: "Songti SC", serif; font-size: 1.7rem; letter-spacing: .08em; }
+.teller-note { display: flex; align-items: flex-start; gap: 11px; margin: 26px 0 0; padding: 14px; border: 1px solid rgba(196,164,255,.18); border-radius: 16px; background: rgba(171,128,238,.07); color: rgba(246,243,255,.82); font-family: "PingFang SC", sans-serif; font-size: .875rem; line-height: 1.75; }
+.teller-note b { display: block; margin-bottom: 3px; color: #d7bcff; font-weight: 500; }
+.teller-badge { flex: 0 0 48px; width: 48px; height: 48px; border-radius: 12px; background: rgba(181,136,245,.12); object-fit: contain; }
+.teller-note.green { border-color: rgba(147,219,181,.18); background: rgba(90,157,125,.07); }
+.teller-note.green b, .green-ink { color: #a9ddbc; }
+.teller-note.green .teller-badge { background: rgba(119,191,151,.12); }
+.purple-ink { color: #d7bcff; }
+.result-actions { display: grid; gap: 6px; margin-top: 22px; }
+.text-button { min-height: 44px; color: rgba(255,255,255,.62); border: 0; background: transparent; cursor: pointer; font-size: .88rem; }
+.responsible-note { margin: 17px 0 0; color: rgba(255,255,255,.6); font-family: "PingFang SC", sans-serif; font-size: .75rem; line-height: 1.7; text-align: center; }
+
+.toast {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  padding: 10px 16px;
+  color: #171124;
+  border-radius: 999px;
+  background: #f3edff;
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  pointer-events: none;
+  font-family: "PingFang SC", sans-serif;
+  font-size: .78rem;
+  transition: .28s ease;
+}
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+@keyframes breathe { 50% { opacity: .25; transform: scale(.7); } }
+
+@media (min-width: 680px) {
+  body { display: grid; place-items: center; background: #040409; }
+  .experience { min-height: min(900px, 100svh); border-inline: 1px solid rgba(255,255,255,.05); }
+}
+
+@media (max-height: 680px) {
+  .screen-copy.compact { padding-top: 4px; }
+  h2 { margin-bottom: 22px; }
+  .teller-note { margin-top: 18px; }
+  .welcome-screen .lede { font-size: .9375rem; }
+  .welcome-screen .screen-copy { padding-top: 0; }
+  .welcome-screen .bank-title { font-size: 2.6rem; margin-bottom: 12px; }
+  .welcome-screen .kicker { margin-bottom: 12px; }
+  .welcome-screen { padding-top: 72px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .welcome-screen .primary-button { margin-top: 12px; }
+  .teller-stage { height: clamp(176px, 31svh, 210px); }
+  .hero-teller { width: 50%; }
+  .teller-purple { left: 0; }
+  .teller-green { right: 0; }
+}
+
+@media (max-width: 350px) {
+  .screen { padding-inline: 20px; }
+  .welcome-screen .primary-button { left: 20px; right: 20px; }
+  .manifest-card { padding-inline: 16px; }
+  .card-head { letter-spacing: 0; }
+  .field-row { font-size: .875rem; }
+  .amount-field input { width: 82px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* Complete ticket numbers inside the original universe check. */
+.screen { top: max(82px, calc(env(safe-area-inset-top) + 58px)); padding-top: 16px; }
+.result-screen { padding-top: 12px; }
+.ticket-list { display: grid; gap: 12px; margin: 18px 0 26px; }
+.ticket-entry { padding: 11px 10px 13px; border: 1px solid var(--line); border-radius: 14px; background: rgba(8,8,21,.25); }
+.entry-meta { margin-bottom: 10px; color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .73rem; }
+.ball-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ball-area-label { width: 100%; color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .65rem; }
+.ticket-ball { display: grid; place-items: center; width: 29px; height: 29px; border: 1px solid rgba(243,185,203,.24); border-radius: 50%; color: #ffd8e4; background: rgba(174,73,107,.12); font-family: Inter, sans-serif; font-size: .8rem; font-weight: 500; }
+.special-balls .ticket-ball { border-color: rgba(137,188,244,.4); color: #c6ddff; background: rgba(74,110,163,.16); }
+.result-plan { margin-bottom: 10px; }
+
+@media (max-width: 350px) {
+  .amount-field input { width: 110px; }
+  .manifest-card .ticket-ball { width: 27px; height: 27px; }
+}
+@media (max-height: 680px) {
+  .screen { padding-top: 8px; }
+  .welcome-screen { padding-top: 0; }
+}
+
+.ticket-summary { margin-bottom: 6px; color: var(--gold); font-family: "PingFang SC", sans-serif; font-size: .85rem; line-height: 1.7; }
+.ticket-entry { display: flex; flex-wrap: wrap; gap: 8px; }
+.entry-meta { flex-basis: 100%; margin: 0; }
+.ball-row { flex-wrap: nowrap; align-items: center; gap: 4px; margin: 0; }
+.ball-area-label { width: auto; margin-right: 2px; font-size: .6rem; }
+.ticket-ball { width: 23px; height: 23px; font-size: .75rem; }
+@media (max-width: 350px) {
+  .manifest-card .ticket-ball { width: 21px; height: 21px; }
+}
+
+/* Lucky coins and gratitude share the final input step. */
+[hidden] { display: none !important; }
+.coins-copy { padding-top: clamp(10px, 3svh, 24px); margin-bottom: 22px; }
+.coins-copy h2 { font-size: clamp(1.9rem, 9vw, 2.9rem); line-height: 1.35; margin-bottom: 16px; }
+.coins-copy h2 span { color: var(--gold); }
+.coins-lede { font-family: "PingFang SC", sans-serif; font-size: .88rem; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+.coins-amount { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 16px 0; color: var(--gold); font-family: "PingFang SC", sans-serif; }
+.coin-mark { width: 42px; height: 42px; display: grid; place-items: center; flex-shrink: 0; border-radius: 50%; border: 1px solid rgba(255,220,168,.7); background: radial-gradient(circle at 30% 25%, #fff0c4, #d19b48); color: #5c401b; box-shadow: 0 0 36px rgba(245,200,122,.2); font-size: 1.4rem; }
+.coins-amount input { width: 140px; padding: 0 0 4px; border: 0; border-bottom: 1px solid rgba(255,220,168,.4); border-radius: 0; outline: none; background: transparent; color: var(--gold); font-size: 3.4rem; line-height: 1.2; text-align: center; font-family: Inter, sans-serif; -moz-appearance: textfield; }
+.coins-amount input::-webkit-inner-spin-button, .coins-amount input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.coins-unit { margin: 7px 0 30px; color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .75rem; text-align: center; }
+.gratitude-label { margin-bottom: 10px; }
+.gratitude-input { min-height: 72px; height: 88px; padding-top: 12px; font-size: 1rem; }
+.coins-error { margin: 12px 0 0; color: #ffd1a5; font-family: "PingFang SC", sans-serif; font-size: .8rem; line-height: 1.7; }
+.luck-button { position: relative; width: 100%; min-height: 72px; margin-top: auto; overflow: hidden; padding: 15px; border: 1px solid rgba(255,230,182,.68); border-radius: 18px; background: linear-gradient(110deg, #f6e8cc, #e2b575); color: #2a1b0b; box-shadow: 0 12px 44px rgba(237,190,112,.15); font-family: "PingFang SC", sans-serif; font-size: 1.05rem; font-weight: 600; touch-action: none; cursor: pointer; }
+.luck-button > span { position: relative; pointer-events: none; }
+.luck-button .luck-button-progress { position: absolute; inset: 0; width: var(--progress, 0%); background: linear-gradient(90deg, rgba(255,248,221,.5), rgba(255,253,238,.88)); transition: width .04s linear; }
+.luck-button-star { display: inline-block; margin-right: 8px; }
+.luck-button.is-holding { box-shadow: 0 0 42px rgba(255,222,153,.38), 0 0 80px rgba(161,129,230,.18); }
+.luck-button.is-holding .luck-button-star { transform: scale(1.15); }
+.luck-button:disabled { opacity: .35; cursor: default; }
+.hold-hint { margin: 13px 0 0; text-align: center; color: var(--gold); font-family: "PingFang SC", sans-serif; font-size: .78rem; }
+.coins-back { align-self: center; padding-top: 12px; }
+.ticket-game { margin: 24px 0 12px; font-size: 1.5rem; color: var(--ink); font-family: "PingFang SC", sans-serif; letter-spacing: 0; line-height: 1.5; }
+.ticket-total { margin: 0; font-family: Inter, "PingFang SC", sans-serif; color: var(--gold); font-size: 1.05rem; }
+.wish-receipt { margin-top: 10px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .82rem; line-height: 1.7; }
+.wish-receipt p { margin-bottom: 6px; overflow-wrap: anywhere; }
+.wish-receipt span { color: var(--gold); }
+@media (max-height: 740px) {
+  .coins-copy { padding-top: 0; margin-bottom: 14px; }
+  .coins-copy h2 { margin-bottom: 12px; font-size: 2rem; }
+  .coins-lede { margin-bottom: 10px; }
+  .coins-amount { padding-block: 8px; }
+  .coins-unit { margin-bottom: 18px; }
+  .gratitude-input { height: 66px; min-height: 66px; }
+  .luck-button { min-height: 62px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .luck-button.is-holding .luck-button-star { transform: none; }
+  .luck-button .luck-button-progress { transition: none; }
+}
+
+/* Place #luckEffects as a body child; optional --luck-origin-y positions the celebration. */
+#luckEffects {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: layout style paint;
+}
+#luckEffects::before,
+#luckEffects .luck-halo,
+#luckEffects .luck-star {
+  position: absolute;
+  left: 50%;
+  top: var(--luck-origin-y, 52%);
+  pointer-events: none;
+}
+#luckEffects::before {
+  content: '';
+  width: min(72vw, 310px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 221, 149, .16), rgba(178, 145, 247, .08) 45%, transparent 70%);
+  transform: translate(-50%, -50%) scale(.8);
+  opacity: 0;
+  transition: opacity .16s ease, transform 1.4s ease-out;
+}
+#luckEffects.is-holding::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+#luckEffects .luck-halo {
+  width: min(90vw, 400px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 221, 149, .29), rgba(197, 159, 249, .14) 38%, transparent 69%);
+  opacity: 0;
+  animation: luck-halo-release .78s ease-out both;
+}
+#luckEffects .luck-star {
+  font-size: var(--luck-size);
+  line-height: 1;
+  color: #ffde99;
+  text-shadow: 0 0 10px rgba(255, 213, 131, .6);
+  opacity: 0;
+  animation: luck-star-release .74s cubic-bezier(.12, .62, .3, 1) var(--luck-delay) both;
+}
+#luckEffects .luck-star-purple { color: #d5b7ff; text-shadow: 0 0 10px rgba(195, 152, 255, .55); }
+@keyframes luck-halo-release {
+  0% { opacity: .75; transform: translate(-50%, -50%) scale(.38); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.15); }
+}
+@keyframes luck-star-release {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.3); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--luck-x)), calc(-50% + var(--luck-y))) rotate(var(--luck-turn)) scale(.55); }
+}
+/* Calm fade, no expansion, movement, spinning or flashing. */
+#luckEffects.is-reduced-motion::before { transition: opacity .16s ease; transform: translate(-50%, -50%); }
+#luckEffects.is-reduced-motion .luck-halo { animation: luck-calm-fade .6s ease-out both; transform: translate(-50%, -50%); }
+#luckEffects.is-reduced-motion .luck-star {
+  animation: luck-calm-fade .6s ease-out both;
+  transform: translate(calc(-50% + var(--luck-x)), calc(-50% + var(--luck-y)));
+}
+@keyframes luck-calm-fade { from { opacity: .65; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  #luckEffects::before { transition: opacity .16s ease; transform: translate(-50%, -50%) !important; }
+  #luckEffects .luck-halo { animation: luck-calm-fade .6s ease-out both; transform: translate(-50%, -50%); }
+  #luckEffects .luck-star {
+    animation: luck-calm-fade .6s ease-out both;
+    transform: translate(calc(-50% + var(--luck-x)), calc(-50% + var(--luck-y)));
+  }
+}
+
+.target-condition { margin: 16px 0 0; padding: 10px 12px; border-left: 2px solid rgba(244,219,172,.5); border-radius: 0 8px 8px 0; background: rgba(244,219,172,.04); color: var(--muted); font-family: "PingFang SC", sans-serif; font-size: .75rem; line-height: 1.8; }
+
+/* Text-only tellers in the public candidate. */
+.public-teller{display:grid;place-items:center;width:100%;height:100%;font:500 48px serif;color:#f1ddb3;}
+.teller-note .public-teller{width:48px;height:48px;flex-shrink:0;font-size:16px;}
